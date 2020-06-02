@@ -35,6 +35,22 @@ int crossCorrelate(std::vector<int> first,std::vector<int> second){
     return value;
 }
 
+int crossCorrelate(std::vector<int> first,std::vector<int> second, int startIndex){
+    int value = 0;
+    int j = 0;
+
+    for(int i = startIndex; i < CODE_SIZE; i++){
+        value = value + (first[j] * second[i]);
+        j++;
+    }
+    for(int i = 0; i < startIndex; i++){
+        value = value + (first[j] * second[i]);
+        j++;
+    }
+
+    return value;
+}
+
 std::vector<int>shiftCode(std::vector<int> code, int count){
     std::vector<int> result = std::vector<int>();
 
@@ -77,8 +93,9 @@ int main(int argc, char *argv[]) {
     for(int s = 1; s < 25; s++) {
         std::vector<int> code = codeGenerator.chipCode(s);
         for (int i = 0; i < CODE_SIZE; i++) {
-            std::vector<int> shiftedCode = shiftCode(fileValue, i);
-            int correlation = crossCorrelate(code, shiftedCode);
+            //std::vector<int> shiftedCode = shiftCode(fileValue, i);
+            //int correlation = crossCorrelate(code, shiftedCode);
+            int correlation = crossCorrelate(code, fileValue, i);
             if(correlation > CODE_SIZE + getNegativeNoiseValue()){
                 std::cout << "Satellite " << s << " has sent bit 1 (delta = " << i << ")" << std::endl;
             }else if(correlation < ((-1) * CODE_SIZE + getPositiveNoiseValue())){
